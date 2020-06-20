@@ -4,7 +4,6 @@ import (
 	"crypto/sha256"
 	"hash"
 	"io"
-	"log"
 )
 
 type HashBlocker struct {
@@ -15,14 +14,10 @@ func (hb HashBlocker) Write(b []byte) (int, error) {
 	return hb.h.Write(b)
 }
 
-func (hb HashBlocker) Add(r io.Reader) int64 {
+func (hb HashBlocker) Add(r io.Reader) (int64, error) {
 	n, err := io.Copy(hb, r)
 
-	if err != nil {
-		log.Printf("hb.Add error: %v\n", err)
-	}
-
-	return n
+	return n, err
 }
 
 func New() HashBlocker {
